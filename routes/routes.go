@@ -21,6 +21,7 @@ func SetupRoutes(r *gin.Engine) {
 		protected := api.Group("/")
 		protected.Use(middleware.AuthMiddleware())
 		{
+			// Produk
 			products := protected.Group("/products")
 			{
 				products.GET("", handlers.GetProducts)
@@ -28,6 +29,16 @@ func SetupRoutes(r *gin.Engine) {
 				products.PUT("/:id", middleware.AdminOnly(), handlers.UpdateProduct)
 				products.DELETE("/:id", middleware.AdminOnly(), handlers.DeleteProduct)
 			}
+
+			// Transaksi
+			transactions := protected.Group("/transactions")
+			{
+				transactions.GET("", handlers.GetTransactions)
+				transactions.POST("", handlers.CreateTransaction)
+			}
+
+			// Laporan
+			protected.GET("/reports/daily", middleware.AdminOnly(), handlers.GetReport)
 		}
 	}
 }
